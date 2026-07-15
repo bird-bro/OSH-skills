@@ -416,7 +416,7 @@ OpenSpec ships Codex-native drivers: `.codex/skills/openspec-*` skills (invoked 
 ```
 propose:  openspec new change <name>  →  fill proposal.md + specs/<capability>/spec.md (## ADDED Requirements)
                                      (AGENTS.md tells AI to brainstorm/clarify first)
-design:   (UI/page work only - before apply) build an HTML prototype first. Two paths:
+design:   (UI/page work, new pages only - before apply; existing-page edits skip) build an HTML prototype first. Two paths:
           ① code-first: write HTML/CSS (or React+Tailwind/shadcn) directly → render in `browser` → `screenshot` self-check (fastest for simple pages/prototypes)
           ② `frontend-app-builder` skill: Codex as senior designer → Image Gen visual concept → user confirms → faithful code impl → `browser` + `view_image` compare to 10/10 (no Figma)
           Main stack: `build-web-apps` (`frontend-app-builder` + `shadcn-best-practices`) + `browser` + `screenshot`; default HTML/CSS for static/single-file, React+Vite only for complex apps

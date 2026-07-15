@@ -1825,7 +1825,7 @@ You are a **$label**. Your scope: UI, components, state, API integration.
 ## Mock-First
 - Mock APIs from \`../openspec/specs/api/spec.md\` (any mock tool: MSW / mockjs / vite-plugin-mock / etc.)
 - **Mini-program exception** (WeChat/Alipay/etc.): delivery chain (dev tools -> real device -> review -> online) makes mock low-ROI; direct connection to a real test backend is valid. Skip mock, wire real API calls early to surface openid/domain/real-device issues.
-- UI prototype via \`frontend-design\` skill → **user confirms** → then \`/opsx:apply\`
+- UI prototype via \`frontend-design\` skill (new pages only; existing-page edits skip) → **user confirms** → then \`/opsx:apply\`
 
 ## Module Structure
 [Describe frontend module/layout]
@@ -1977,7 +1977,7 @@ __COORD_TPL__
      echo "1. Write spec: \`/opsx:propose <change>\` (auto-triggers Superpowers brainstorm)"
      if has backend && (has frontend || has frontend-mobile); then
       echo "2. Backend Agent: \`cd @@BACKEND_DIR@@\` → launch AI (claude/codex) → implement to spec (TDD)"
-      echo "3. Frontend Agent (parallel): \`cd @@FRONTEND_DIR@@\` → launch AI (claude/codex) → mock from spec → \`frontend-design\` skill → UI prototype → **user confirms** → \`/opsx:apply\`"
+      echo "3. Frontend Agent (parallel): \`cd @@FRONTEND_DIR@@\` → launch AI (claude/codex) → mock from spec → \`frontend-design\` skill → UI prototype (new pages only; existing-page edits skip) → **user confirms** → \`/opsx:apply\`"
      echo "4. Verify against WHEN/THEN; \`/opsx:archive\` when done"
     else
       echo "2. Agent: \`cd <stack-dir>\` → launch AI (claude/codex) → implement to spec (TDD)"
@@ -1996,7 +1996,7 @@ __COORD_TPL__
     echo ""
     echo "### AI Coding Rules"
     echo "- Spec first - read \`openspec/specs/\` before writing code"
-    if has frontend || has frontend-mobile; then echo "- UI prototype first - \`frontend-design\` skill before \`/opsx:apply\`"; fi
+    if has frontend || has frontend-mobile; then echo "- UI prototype first (new pages only) - \`frontend-design\` skill before \`/opsx:apply\`; existing-page edits skip the prototype"; fi
     echo "- TDD - Superpowers auto-enforces"
     echo "- No cross-domain - each agent writes only its own stack"
     echo "- Never modify existing methods - use overloading"

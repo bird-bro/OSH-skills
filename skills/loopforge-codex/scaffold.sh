@@ -1729,7 +1729,7 @@ You are a **$label**. Your scope: UI, components, state, API integration.
 ## Mock-First
 - Mock APIs from \`../openspec/specs/api/spec.md\` (any mock tool: MSW / mockjs / vite-plugin-mock / etc.)
 - **Mini-program exception** (WeChat/Alipay/etc.): delivery chain (dev tools -> real device -> review -> online) makes mock low-ROI; direct connection to a real test backend is valid. Skip mock, wire real API calls early to surface openid/domain/real-device issues.
-- UI prototype → **user confirms** → then implement (openspec-driven)
+- UI prototype (new pages only; existing-page edits skip) → **user confirms** → then implement (openspec-driven)
 
 ## Module Structure
 [Describe frontend module/layout]
@@ -1888,7 +1888,7 @@ __COORD_TPL__
     echo "1. Propose: \`openspec new change <name>\` → fill \`proposal.md\` + \`specs/<capability>/spec.md\` (## ADDED Requirements + WHEN/THEN); brainstorm/clarify first"
     if has backend && (has frontend || has frontend-mobile); then
       echo "2. Backend Agent: \`cd @@BACKEND_DIR@@\` → launch AI (codex/claude) → implement to spec (TDD)"
-      echo "3. Frontend Agent (parallel): \`cd @@FRONTEND_DIR@@\` → launch AI → mock from spec → UI prototype → **user confirms** → implement"
+      echo "3. Frontend Agent (parallel): \`cd @@FRONTEND_DIR@@\` → launch AI → mock from spec → UI prototype (new pages only; existing-page edits skip) → **user confirms** → implement"
       echo "4. Verify: L1 build + L2 \`openspec validate <name>\` + L3 tests → write \`verify.md\`"
       echo "5. Archive: \`openspec archive <name>\` when \`verify.md\` overall = PASS"
     else
@@ -1909,7 +1909,7 @@ __COORD_TPL__
     echo ""
     echo "### AI Coding Rules"
     echo "- Spec first - read \`openspec/specs/\` before writing code"
-    if has frontend || has frontend-mobile; then echo "- UI prototype first - confirm with user before implementing"; fi
+    if has frontend || has frontend-mobile; then echo "- UI prototype first (new pages only) - confirm with user before implementing; existing-page edits skip the prototype"; fi
     echo "- TDD - Superpowers discipline enforced (red → green → refactor)"
     echo "- No cross-domain - each agent writes only its own stack"
     echo "- Dangerous ops (\`rm -rf\`, \`git push --force\`, \`git reset --hard\`) gated by Codex sandbox/approval"

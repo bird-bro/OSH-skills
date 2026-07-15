@@ -418,6 +418,6 @@ coordination layer:
   → AI asks clarifying questions (TDD flow begins)
 ```
 
-For UI/page work, insert a `design` step before `/opsx:apply`: build an HTML prototype first. Two paths - ① code-first: write HTML/CSS (or React+Tailwind/shadcn) directly → render in `browser` → `screenshot` self-check (fastest for simple pages/prototypes); ② `frontend-app-builder` skill: Claude as senior frontend designer → Image Gen visual concept → user confirms → faithful code impl → `browser` + `view_image` compare to 10/10 (no Figma). Main stack: `build-web-apps` (`frontend-app-builder` + `shadcn-best-practices`) + `browser` + `screenshot`; default HTML/CSS for static/single-file, React+Vite only for complex apps.
+For UI/page work on new pages, insert a `design` step before `/opsx:apply`: build an HTML prototype first (existing-page edits skip). Two paths - ① code-first: write HTML/CSS (or React+Tailwind/shadcn) directly → render in `browser` → `screenshot` self-check (fastest for simple pages/prototypes); ② `frontend-app-builder` skill: Claude as senior frontend designer → Image Gen visual concept → user confirms → faithful code impl → `browser` + `view_image` compare to 10/10 (no Figma). Main stack: `build-web-apps` (`frontend-app-builder` + `shadcn-best-practices`) + `browser` + `screenshot`; default HTML/CSS for static/single-file, React+Vite only for complex apps.
 
 This is the integration protocol between OpenSpec and Superpowers - the "loop" in Loop Engineering: propose → plan → design(UI) → execute → review → verify → archive.
