@@ -1728,6 +1728,7 @@ You are a **$label**. Your scope: UI, components, state, API integration.
 
 ## Mock-First
 - Mock APIs from \`../openspec/specs/api/spec.md\` (any mock tool: MSW / mockjs / vite-plugin-mock / etc.)
+- **Mini-program exception** (WeChat/Alipay/etc.): delivery chain (dev tools -> real device -> review -> online) makes mock low-ROI; direct connection to a real test backend is valid. Skip mock, wire real API calls early to surface openid/domain/real-device issues.
 - UI prototype → **user confirms** → then implement (openspec-driven)
 
 ## Module Structure
@@ -1901,7 +1902,7 @@ __COORD_TPL__
       echo "A cross-stack \"declared dependency\" with no parent is lost. Stable pattern (OpenSpec 1.6.0):"
       echo "1. Parent: create \`openspec/coordination/<feature>.md\` (shared design/decisions + change registry)"
       echo "2. Per stack (parallel): \`openspec new change <name> --goal \"<feature>\"\` (soft-tagged to the feature)"
-      echo "3. Implement each in its own stack (cross-domain ban unchanged; frontend mocks first); coordinate via the coordination doc \`design\`/\`decisions\`"
+      echo "3. Implement each in its own stack (cross-domain ban unchanged; frontend mocks first - web only; mini-program may connect to real test backend); coordinate via the coordination doc \`design\`/\`decisions\`"
       echo "4. Gate: feature done = ALL registered changes verify PASS (\`openspec/verify.config.yaml\`) -> archive each"
       echo "   Single-stack: skip coordination; plain \`openspec new change\`. Open all stacks: \`openspec workset open @@WS_NAME@@ --tool code\`."
     fi

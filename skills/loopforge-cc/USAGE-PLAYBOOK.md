@@ -103,6 +103,7 @@ cd ./myproject
    - hooks 为 echo 桩（推荐默认）-> PASS；可选替换为真实 lint/build 闸门（质量门禁已由 verify + verification-before-completion 覆盖，非必须）
    - specs/*.md 为模板骨架 -> 随首个 `/opsx:propose` 逐步填充
    - mock 方案：项目使用 mockjs / vite-plugin-mock 等（非 MSW）-> H3 PASS（任何 mock 方案均算通过）
+   - 小程序前端（微信/支付宝等）：交付链路决定 mock 性价比低 -> 直连真实测试后端是合理选择 -> H3 PASS（无需 mock 层，详见 H3 审计注记）
 4. **起点 B 额外**：重构后重跑 `./scaffold.sh check ./legacy` + 全量审计，对比前后成熟度，确认：无重复、无死文件、各 agent 含必备 8 段、跨域禁令显式、根 `CLAUDE.md` ≤120 行。
 
 ### 进入 Loop 前
@@ -393,6 +394,8 @@ scaffold 按栈类型给默认值（backend → `mvn compile -q`，frontend → 
 2. 页面逻辑基于 mock 跑通,前端 `/opsx:verify` 可以独立 PASS
 3. 后端就绪后,Frontend Agent 做一个"切换" change:删 mock 路径,接真实 API base URL
 4. 这个"切换"本身也走 propose → apply → verify → archive(因为改了行为)
+
+> **小程序例外**：微信/支付宝等小程序的交付链路（开发者工具->真机预览->体验版->审核->线上）使 mock 仅在第一站有效；线上强制 HTTPS 域名白名单（localhost 仅临时豁免），且强绑定微信生态能力（openid 登录、授权、支付、分享、订阅消息），mock 无法真实验证。手写 JS 拦截覆盖期短、性价比远低于 web。**小程序前端直连真实测试后端是合理的工程选择**，不适用 mock-first 原则--尽早连真环境反而能更早暴露 openid 绑定、域名白名单、真机网络等 mock 验不了的问题。
 
 > 跨域禁令保证:Backend Agent 的 `CLAUDE.md` 写了 `NEVER generate frontend code`,Frontend Agent 的 `CLAUDE.md` 写了 `NEVER generate backend code`。各自只在自己的目录里工作,scaffold 生成时已预置。
 
@@ -696,3 +699,4 @@ CLI 版做关键词扫描:自动检测技术栈(backend / frontend / mobile)、�
 > - **H4 git worktree**：多仓库 workspace（根目录非 git，各子目录独立 git）是合法模式 -> WARN，不是 FAIL
 > - **S7 hooks**：scaffold 生成的 echo 桩是推荐默认 -> PASS；可选替换为真实闸门（质量门禁已由 verify + verification-before-completion 覆盖，非必须）
 > - **H3 mock-first**：任何 mock 方案都算通过（MSW / mockjs / vite-plugin-mock-dev-server / nock 等）
+> - **H3 小程序例外**：小程序前端直连真实测试后端 -> PASS（交付链路决定，非疏漏）；web + 小程序混合项目按栈分别评判，混合结果仍为整体 PASS

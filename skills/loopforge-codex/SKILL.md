@@ -146,7 +146,7 @@ Environment score = E_yes / 4. 0/4 → STOP; 1-3/4 → WARNING; 4/4 → PASS.
 |:--|:--|:--|
 | H1 | Workspace separation | One subdirectory per tech stack, each with its own `AGENTS.md` (+ `CLAUDE.md` mirror if cross-tool) |
 | H2 | Shared spec accessible | All agents reference `../openspec/specs/` |
-| H3 | Mock-first frontend | Frontend mocks APIs from the contract (MSW) |
+| H3 | Mock-first frontend | Frontend mocks APIs from contract (MSW/mockjs/etc); mini-program: direct real-backend is valid (see H3 notes) |
 | H4 | Git worktree isolation | Features developed in isolated worktrees/branches |
 | H5 | Root `AGENTS.md` is nav hub | ≤ 120 lines; project map + build + workflow |
 | H6 | Session continuity | Codex goal/plan tracking + session history keep continuity (no `/resume` `/branch` `/rewind`) |
@@ -292,7 +292,29 @@ Project map + business context (1-3 sentences) + tech-stack table + development 
   axios-mock-adapter, nock, etc.
 - Check for mock usage in frontend `package.json` dependencies or source code.
 - Report FAIL only if no mock mechanism exists AND no real API calls are wired.
-
+- **Environment-specific judgment** - mock-first value depends on the frontend
+  runtime environment, not all frontends benefit equally:
+  - **Browser-based web** (vite/webpack dev server): mock plugins intercept
+    requests at zero cost, no HTTPS/domain restrictions, localhost is the
+    terminal form -> mock covers the entire dev phase. Mock-first is the
+    expected practice; absence is a real gap.
+  - **Mini-program** (WeChat/Alipay/etc.): delivery chain is dev-tools ->
+    real-device preview -> experience version -> review -> online. Mock only
+    covers the first station; later stages require a real backend. Production
+    enforces HTTPS domain whitelists (localhost is a temporary dev exemption),
+    and WeChat ecosystem capabilities (openid login, authorization, payment,
+    sharing, subscribe messages) cannot be meaningfully mocked. Hand-written
+    JS interception has a short coverage window and low ROI vs web.
+- **Mini-program exception**: direct connection to a real test backend is a
+  **valid engineering choice** driven by the delivery chain, not an omission.
+  Report **PASS** for mini-program frontends that wire real API calls to a
+  test backend, even without a mock layer. Early real-backend integration
+  surfaces openid binding, domain whitelist, and real-device network issues
+  that mock cannot catch.
+- When a project has both web and mini-program frontends, evaluate H3
+  **per-stack** - web frontend needs mock; mini-program frontend does not.
+  A mixed result (web PASS + mini-program PASS-without-mock) is an overall
+  **PASS**, not a partial/warning.
 
 ## Verification Checklist
 
@@ -322,7 +344,7 @@ Stable pattern (CLI-driven; works in Codex and Claude Code):
 2. Parent : cp openspec/coordination/_template.md openspec/coordination/<feature>.md ; fill shared design/decisions
 3. Per stack (parallel), each soft-tagged to the feature:
      openspec new change <name> --goal "<feature>"
-4. Implement each in its own stack (cross-domain ban unchanged; frontend mocks first).
+4. Implement each in its own stack (cross-domain ban unchanged; frontend mocks first (web frontends; mini-program may connect to real test backend per H3 notes)).
    Cross-stack handoffs/sequencing live in openspec/coordination/<feature>.md (design/decisions).
 5. Gate: feature done = ALL registered changes verify PASS (openspec/verify.config.yaml) -> archive each.
    Open all stacks: openspec workset open <project> --tool code  (IDE; 1.6.0 temporarily disables agent open -
@@ -373,7 +395,7 @@ coordination layer:
 - **Each stack dispatches its own implementer subagents** (cross-domain ban unchanged).
 - The **execution-contract.md** defines task batches per stack and inter-stack dependencies.
 - **Frontend implementer** mocks APIs from `openspec/specs/api/spec.md` (MSW) before
-  backend is ready; **backend implementer** implements to the same spec.
+  backend is ready (web frontends; mini-program may connect to real test backend per H3 notes); **backend implementer** implements to the same spec.
 - The **Coordinator** (root AGENTS.md role) tracks both stacks' progress via
   `openspec/sdd/progress.md` and the coordination doc registry (`openspec/coordination/<feature>.md`).
 - **Cross-stack gate**: feature is done only when ALL registered changes verify PASS

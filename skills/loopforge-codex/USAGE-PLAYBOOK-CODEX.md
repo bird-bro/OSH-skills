@@ -429,6 +429,8 @@ openspec instructions --change <n>  # 取该 artifact 富化指引
 3. 后端就绪后,Frontend Agent 做一个"切换" change:删 mock 路径,接真实 API base URL
 4. 这个"切换"本身也走 propose → apply → verify → archive(因为改了行为)
 
+> **小程序例外**：微信/支付宝等小程序的交付链路（开发者工具->真机预览->体验版->审核->线上）使 mock 仅在第一站有效；线上强制 HTTPS 域名白名单（localhost 仅临时豁免），且强绑定微信生态能力（openid 登录、授权、支付、分享、订阅消息），mock 无法真实验证。手写 JS 拦截覆盖期短、性价比远低于 web。**小程序前端直连真实测试后端是合理的工程选择**，不适用 mock-first 原则--尽早连真环境反而能更早暴露 openid 绑定、域名白名单、真机网络等 mock 验不了的问题。
+
 > 跨域禁令保证:Backend Agent 的 `AGENTS.md` 写了 `NEVER generate frontend code`,Frontend Agent 的 `AGENTS.md` 写了 `NEVER generate backend code`。各自只在自己的目录里工作,scaffold 生成时已预置。
 > Codex 会话续接:跨栈协作中如果会话中断,新会话让 AI 先读 `openspec/` + 根 `AGENTS.md` 恢复上下文,Codex 自身的 goal/plan 体系会跟踪多步任务进度。
 
