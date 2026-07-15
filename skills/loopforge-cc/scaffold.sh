@@ -2001,6 +2001,7 @@ __COORD_TPL__
     echo "- No cross-domain - each agent writes only its own stack"
     echo "- Never modify existing methods - use overloading"
     echo "- Dangerous ops (\`rm -rf\`, \`git push --force\`, \`git reset --hard\`) gated by sandbox/approval or .claude/settings.json deny list"
+    echo "- Chinese proposal intro - after \`/opsx:propose\` artifacts, write \`docs/proposals/<name>.zh.md\` (Chinese overview incl. proposal explanation, file paths+roles, next-step action suggestions, flow plan; non-authoritative disclaimer header; \`openspec/\` English stays source of truth). \`<name>\` = change name, or feature name for cross-stack."
     echo ""
     echo "### Session Commands"
     echo "\`/resume\` · \`/branch\` · \`/rewind\`"
@@ -2030,7 +2031,7 @@ target/
 EOF
 
   # ---------- docs/ human guide (Chinese, NOT auto-loaded) ----------
-  mkdir -p docs
+  mkdir -p docs/proposals
   cat <<'__GUIDE_ZH__' | subst | write_if_absent docs/GUIDE.zh.md
 # @@PROJECT_NAME@@ 项目指南（人类阅读）
 
@@ -2052,6 +2053,7 @@ EOF
 | 斜杠命令用法 | `.claude/commands/opsx/` | 英文 |
 | 验证 skill/命令 | Claude: `.claude/commands/opsx/verify.md`; Codex: `.codex/skills/openspec-verify/` | 英文 |
 | 构建测试配置（验证用） | `openspec/verify.config.yaml` | 英文 |
+| 提案中文介绍 | `docs/proposals/<name>.zh.md` | 中文 |
 | 本人类导览 | `docs/GUIDE.zh.md`（本文件） | 中文 |
 
 ## 日常工作流（中文口语版）
