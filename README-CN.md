@@ -10,7 +10,7 @@
 
 LoopForge 的出发点很简单：一个人维护多个已上线的老项目 —— 没有 spec 文档，没有测试，一堆屎山代码。怎么推进 AI 的 loop 开发模式才能不被卡死？
 
-最初尝试了优秀的规格驱动框架 spec-superflow，但它预设项目从零开始或已有测试基线，在实际使用中对无测试的老代码会拦截每一次改动。LoopForge 在向 spec-superflow 深入学习后，选择了不同的路线：用更轻量的生成器方式（shell + Python），先审计缺什么，再在不破坏现有代码的前提下重构，在严格 TDD 会卡死的环节用特征化测试与债务登记安全降级。
+最初尝试了优秀的规格驱动框架 spec-superflow，但它预设项目从零开始或已有测试基线，在实际使用中对无测试的老代码会拦截每一次改动。LoopForge 在向 spec-superflow 学习后，选择了不同的路线：用更轻量的生成器方式（shell + Python），先审计缺什么，再在不破坏现有代码的前提下重构，在严格 TDD 会卡死的环节用特征化测试与债务登记安全降级。
 
 LoopForge 围绕工业级三层范式 **OpenSpec + Superpowers + Harness**构建，以 AI 协作优化 Skill 的形式提供两个并列版本 —— 各版本内置独立的 `scaffold.sh`（CC 版创建 `.claude/`，Codex 版创建 `.codex/`）：
 
