@@ -1,2 +1,4 @@
 # Allow .md files in skills directory (global gitignore ignores *.md)
 !skills/**/*.md
+loopforge-process-retrospective-contract-bound-disable.md
+loopforge-retrospective-contract-bound-disable-action-plan.md
